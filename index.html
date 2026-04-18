@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aitbaar Store - Next Level</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f4f6f9}
+header{background:#111;color:#fff;padding:15px 25px;display:flex;justify-content:space-between;align-items:center}
+nav a{color:#fff;margin:0 10px;text-decoration:none}
+.hero{background:linear-gradient(120deg,#111,#333);color:#fff;text-align:center;padding:70px 20px}
+.hero h1{font-size:40px}
+.btn{background:#ff6b00;color:#fff;padding:10px 15px;border:none;cursor:pointer;border-radius:6px}
+.section{padding:40px 20px;text-align:center}
+.products{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
+.card{background:#fff;padding:15px;width:220px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+.card img{width:100%;border-radius:10px}
+.price{color:#ff6b00;font-weight:bold}
+
+.cart{position:fixed;top:15px;right:15px;background:#fff;padding:15px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.2);width:280px;max-height:80vh;overflow:auto}
+.cart h3{margin-top:0}
+.cart-item{font-size:14px;margin:6px 0;display:flex;justify-content:space-between;align-items:center}
+.qty-btn{padding:2px 6px;margin:0 3px;cursor:pointer}
+.remove{color:red;cursor:pointer;font-size:12px}
+
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center}
+.modal-content{background:#fff;padding:20px;border-radius:10px;width:300px}
+input{width:100%;padding:8px;margin:5px 0}
+
+footer{background:#111;color:#fff;text-align:center;padding:15px;margin-top:30px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>Aitbaar</h2>
+<nav>
+<a href="#">Home</a>
+<a href="#products">Products</a>
+</nav>
+</header>
+
+<div class="hero">
+<h1>Aitbaar Next Level Store</h1>
+<p>Premium Online Shopping Experience</p>
+</div>
+
+<div class="section" id="products">
+<h2>Products (PKR)</h2>
+<div class="products">
+
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Perfume</h3>
+<p class="price">PKR 7000</p>
+<button class="btn" onclick="addToCart('Perfume',7000)">Add</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>T-Shirt</h3>
+<p class="price">PKR 4200</p>
+<button class="btn" onclick="addToCart('T-Shirt',4200)">Add</button>
+</div>
+
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Shoes</h3>
+<p class="price">PKR 11200</p>
+<button class="btn" onclick="addToCart('Shoes',11200)">Add</button>
+</div>
+
+</div>
+</div>
+
+<!-- CART -->
+<div class="cart">
+<h3>Cart</h3>
+<div id="cartItems"></div>
+<p><b>Total: PKR <span id="total">0</span></b></p>
+<button class="btn" onclick="openCheckout()">Checkout</button>
+<button class="btn" onclick="sendWhatsApp()">WhatsApp Order</button>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>Checkout</h3>
+<input id="name" placeholder="Your Name">
+<input id="address" placeholder="Address">
+<input id="phone" placeholder="Phone">
+<button class="btn" onclick="placeOrder()">Place Order</button>
+</div>
+</div>
+
+<footer>
+<p>© 2026 Aitbaar Store</p>
+</footer>
+
+<script>
+let cart = [];
+
+function addToCart(name, price){
+    let item = cart.find(i => i.name === name);
+    if(item){ item.qty++; } 
+    else { cart.push({name, price, qty:1}); }
+    updateCart();
+}
+
+function updateCart(){
+    let box = document.getElementById('cartItems');
+    let total = 0;
+    box.innerHTML = '';
+
+    cart.forEach((item, index)=>{
+        total += item.price * item.qty;
+        box.innerHTML += `
+        <div class='cart-item'>
+        ${item.name} x${item.qty}
+        <div>
+        <button class='qty-btn' onclick='changeQty(${index},1)'>+</button>
+        <button class='qty-btn' onclick='changeQty(${index},-1)'>-</button>
+        <span class='remove' onclick='removeItem(${index})'>x</span>
+        </div>
+        </div>`;
+    });
+
+    document.getElementById('total').innerText = total;
+}
+
+function changeQty(i,val){
+    cart[i].qty += val;
+    if(cart[i].qty<=0) cart.splice(i,1);
+    updateCart();
+}
+
+function removeItem(i){
+    cart.splice(i,1);
+    updateCart();
+}
+
+function openCheckout(){
+    document.getElementById('modal').style.display='flex';
+}
+
+function placeOrder(){
+    alert('Order Placed Successfully!');
+    cart=[];
+    updateCart();
+    document.getElementById('modal').style.display='none';
+}
+
+function sendWhatsApp(){
+    let msg="Order:%0A";
+    let total=0;
+
+    cart.forEach(i=>{
+        msg+=`${i.name} x${i.qty} = PKR ${i.price*i.qty}%0A`;
+        total+=i.price*i.qty;
+    });
+
+    msg+=`Total: PKR ${total}`;
+
+    let phone='923001234567';
+    window.open(`https://wa.me/${phone}?text=${msg}`,'_blank');
+}
+</script>
+
+</body>
+</html>
+
+
+ lekr hosting whagera krdo
+
